@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "version": "0.0.1",
+  "name": "Gear Grind - Forge Item Reroll",
+  "description": "A browser extension for Gear Grind to easily stats and rarity reroll and reinforce your gambling problem!",
+  "author": "wilian.dev",
+  "default_locale": "en",
+  "icons": {
+    "16": "icons/16.png",
+    "32": "icons/32.png",
+    "48": "icons/48.png",
+    "128": "icons/128.png"
+  },
+  "content_scripts": [
+    {
+      "js": ["scripts/main.js"],
+      "matches": ["https://gear-grind.gw2efficiency.com/*"]
+    }
+  ]
+}
