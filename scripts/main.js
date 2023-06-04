@@ -49,7 +49,7 @@ const handleRerollAction = (modifier, itemInput) => {
 
   itemInput.click()
   MODIFIER_INPUT.click()
-
+  FORGE_FORM.click()
 }
 
 const rerollItem = (ev) => {
