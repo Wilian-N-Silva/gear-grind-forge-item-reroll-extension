@@ -18,3 +18,4 @@
 - Added initializing functions
 - Added buttons builder functions
 - Added item reroll function
+- Added error message box

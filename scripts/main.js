@@ -8,23 +8,28 @@ const GG_RARITY_CLASSES = {
 const GG_ITEM_MODIFIERS = {
   'cube': {
     'id': 7,
-    'name': 'Cube of fuck-this-item'
+    'name': 'Cube of fuck-this-item',
+    'usage': 'reroll the Rarity'
   },
   'cylinder': {
     'id': 15,
-    'name': 'Cylinder of Luck'
+    'name': 'Cylinder of Luck',
+    'usage': 'reroll the Rarity'
   },
   'pyramid': {
     'id': 16,
-    'name': 'Pyramid of Chaos'
+    'name': 'Pyramid of Chaos',
+    'usage': 'reroll the stats'
   },
   'prism': {
     'id': 17,
-    'name': 'Divine Prism'
+    'name': 'Divine Prism',
+    'usage': 'reroll the stats values'
   },
 }
 
-
+const FORGE_FORM = document.querySelector('.forge_form')
+const FORM_CONTAINER = FORGE_FORM.parentElement
 
 var isLoaded = false
 
@@ -39,17 +44,35 @@ const getModifierQuantity = (modifierLabel) => {
   }
 }
 
+const handleErrorMessages = (message) => {
+  const MESSAGE_CONTAINER = FORM_CONTAINER.querySelector('.error_message')
+
+  if (MESSAGE_CONTAINER) {
+    MESSAGE_CONTAINER.innerText = message
+    return
+  }
+
+  const NEW_MESSAGE_CONTAINER = document.createElement('div')
+  NEW_MESSAGE_CONTAINER.classList.add('error_message')
+  NEW_MESSAGE_CONTAINER.innerText = message
+  FORM_CONTAINER.prepend(NEW_MESSAGE_CONTAINER)
+  return
+}
+
 const handleRerollAction = (modifier, itemInput) => {
   const MODIFIER_INPUT = document.querySelector(`input[value="${modifier.id}"]`)
 
   if (!MODIFIER_INPUT) {
-    console.log(`You don't have enough ${modifier.name}`);
+    const message = `You don't have enough ${modifier.name} to ${modifier.usage.toLowerCase()}`
+
+    handleErrorMessages(message)
+
     return;
   }
 
   itemInput.click()
   MODIFIER_INPUT.click()
-  FORGE_FORM.click()
+  FORGE_FORM.submit()
 }
 
 const rerollItem = (ev) => {
@@ -126,7 +149,6 @@ const buildItemButtons = (item) => {
 }
 
 const initRerollOptions = () => {
-  const FORGE_FORM = document.querySelector('.forge_form')
   if (!FORGE_FORM) return;
 
   isLoaded = true
