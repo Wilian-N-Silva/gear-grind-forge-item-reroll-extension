@@ -29,7 +29,6 @@ const GG_ITEM_MODIFIERS = {
 }
 
 const FORGE_FORM = document.querySelector('.forge_form')
-const FORM_CONTAINER = FORGE_FORM.parentElement
 
 var isLoaded = false
 
@@ -45,6 +44,7 @@ const getModifierQuantity = (modifierLabel) => {
 }
 
 const handleErrorMessages = (message) => {
+  const FORM_CONTAINER = FORGE_FORM.parentElement
   const MESSAGE_CONTAINER = FORM_CONTAINER.querySelector('.error_message')
 
   if (MESSAGE_CONTAINER) {
