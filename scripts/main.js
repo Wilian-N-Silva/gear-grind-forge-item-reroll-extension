@@ -28,17 +28,63 @@ const GG_ITEM_MODIFIERS = {
 
 var isLoaded = false
 
-const rerollItem = () => { }
 
-const buildRerollButton = (DATA) => {
+const getModifierQuantity = (modifierLabel) => {
+  const MODIFIER_TEXT = modifierLabel.parentElement.innerText
+  const REG_EXP = /\(([^)]+)\)/g
+
+  while ((test = REG_EXP.exec(MODIFIER_TEXT)) !== null) {
+    if (test.index === test.lastIndex) REG_EXP.lastIndex++
+    return Number((test)[1])
+  }
+}
+
+const handleRerollAction = (modifier, itemInput) => {
+  const MODIFIER_INPUT = document.querySelector(`input[value="${modifier.id}"]`)
+
+  if (!MODIFIER_INPUT) {
+    console.log(`You don't have enough ${modifier.name}`);
+    return;
+  }
+
+  itemInput.click()
+  MODIFIER_INPUT.click()
+
+}
+
+const rerollItem = (ev) => {
+  const { dataset } = ev.target
+
+  const { itemId } = dataset
+  const { nextReroll } = dataset
+
+  const ITEM_RADIO_INPUT = document.querySelector(`input[value="${itemId}"]`)
+
+  switch (nextReroll) {
+    case 'CUBE':
+      handleRerollAction(GG_ITEM_MODIFIERS.cube, ITEM_RADIO_INPUT)
+      break;
+    case 'CYLINDER':
+      handleRerollAction(GG_ITEM_MODIFIERS.cylinder, ITEM_RADIO_INPUT)
+      break;
+    case 'PRISM':
+      handleRerollAction(GG_ITEM_MODIFIERS.prism, ITEM_RADIO_INPUT)
+      break;
+    case 'PYRAMID':
+      handleRerollAction(GG_ITEM_MODIFIERS.pyramid, ITEM_RADIO_INPUT)
+      break;
+  }
+}
+
+const buildRerollButton = (data) => {
   const BUTTON = document.createElement('button')
   const BUTTON_STYLE = 'border: none; background: transparent; color: white; margin-left: 8px; margin-right: 16px; cursor: pointer'
 
   BUTTON.setAttribute('type', 'button')
-  BUTTON.setAttribute('data-item-id', DATA.itemID)
+  BUTTON.setAttribute('data-item-id', data.itemID)
   BUTTON.addEventListener('click', rerollItem)
-  BUTTON.setAttribute('data-next-reroll', DATA.nextReroll)
-  BUTTON.innerText = DATA.label
+  BUTTON.setAttribute('data-next-reroll', data.nextReroll)
+  BUTTON.innerText = data.label
   BUTTON.style = BUTTON_STYLE
 
   return BUTTON
@@ -54,8 +100,8 @@ const handleButtonData = (LABEL, ITEM_ID, NEXT_REROLL) => {
   return BTN_DATA
 }
 
-const buildItemButtons = (ITEM) => {
-  const ITEM_NAME_EL = ITEM.querySelector('span')
+const buildItemButtons = (item) => {
+  const ITEM_NAME_EL = item.querySelector('span')
   const ITEM_ID = ITEM_NAME_EL.getAttribute('item_id')
   const ITEM_CLASSLIST = ITEM_NAME_EL.classList
 
@@ -66,7 +112,7 @@ const buildItemButtons = (ITEM) => {
 
     const BTN_REROLL_RARITY = buildRerollButton(BTN_REROLL_RARITY_DATA)
 
-    ITEM.appendChild(BTN_REROLL_RARITY)
+    item.appendChild(BTN_REROLL_RARITY)
   }
 
   const BTN_REROLL_STATS_DATA = handleButtonData('Reroll Stats', ITEM_ID, 'PYRAMID')
@@ -75,8 +121,8 @@ const buildItemButtons = (ITEM) => {
   const BTN_REROLL_STATS = buildRerollButton(BTN_REROLL_STATS_DATA)
   const BTN_REROLL_STATS_VALUES = buildRerollButton(BTN_REROLL_STATS_VALUES_DATA)
 
-  ITEM.appendChild(BTN_REROLL_STATS)
-  ITEM.appendChild(BTN_REROLL_STATS_VALUES)
+  item.appendChild(BTN_REROLL_STATS)
+  item.appendChild(BTN_REROLL_STATS_VALUES)
 }
 
 const initRerollOptions = () => {
